@@ -20,6 +20,7 @@ bool sink_impl::start() {
     sync_bytes_.push_back(prbs_.Next());
   }
   prbs_.Reset();
+  return true;
 }
 
 static int count_ones(uint8_t b) {
