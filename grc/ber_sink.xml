@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<block>
+    <name>BER Sink</name>
+    <key>ber_sink</key>
+    <category>[Tools]</category>
+    <import>import ber</import>
+    <make>ber.sink()</make>
+
+    <sink>
+        <name>in</name>
+        <type>byte</type>
+        <nports>1</nports>
+    </sink>
+<doc>
+</doc>
+</block>

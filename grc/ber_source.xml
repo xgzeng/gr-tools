@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<block>
+    <name>BER Source</name>
+    <key>ber_source</key>
+    <category>[Tools]</category>
+    <import>import ber</import>
+    <make>ber.source()</make>
+
+    <source>
+        <name>out</name>
+        <type>byte</type>
+        <nports>1</nports>
+    </source>
+<doc>
+</doc>
+</block>
