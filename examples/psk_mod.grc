@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>top_block</value>
+      <value>psk_mod_demod</value>
     </param>
     <param>
       <key>max_nouts</key>
@@ -89,7 +89,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>0.01</value>
+      <value>0.12</value>
     </param>
     <param>
       <key>_enabled</key>

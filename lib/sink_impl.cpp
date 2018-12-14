@@ -82,9 +82,10 @@ int sink_impl::general_work(int noutput_items,
   // DUMP static information every 5 seconds
   auto now = std::chrono::system_clock::now();
   if ((now - last_dump_time_) > std::chrono::seconds(5)) {
-    GR_INFO("ber_sink: ", "error_byte=" << error_byte_count_
-        << " error_bits=" << error_bit_count_
-        << " BER=" << (error_bit_count_ / 8.0) / recv_byte_count_);
+    GR_INFO("ber_sink: ", "processed=" << (recv_byte_count_ * 8.0 / 5 / 1000) << "kbps  "
+        << "error_byte=" << error_byte_count_ << "B  "
+        << "error_bits=" << error_bit_count_  << "b  "
+        << "BER=" << (error_bit_count_ / 8.0) / recv_byte_count_);
     last_dump_time_ = now;
     recv_byte_count_ = 0;
     error_byte_count_ = 0;

@@ -46,7 +46,7 @@
     </param>
     <param>
       <key>id</key>
-      <value>top_block</value>
+      <value>psk_fec_convolution</value>
     </param>
     <param>
       <key>max_nouts</key>
