@@ -67,8 +67,8 @@ int sink_impl::general_work(int noutput_items,
         error_bit_count_ += count_ones(expected ^ received);
 
         continue_error_byte_count_++;
-        if (continue_error_byte_count_ >= 16) {
-          GR_INFO("ber_sink", "16 continue error byte, stream out of sync");
+        if (continue_error_byte_count_ >= max_error_bytes_allowed_) {
+          GR_INFO("ber_sink", "continue error bytes, stream out of sync");
           synched_ = false;
           break;
         }
@@ -82,10 +82,14 @@ int sink_impl::general_work(int noutput_items,
   // DUMP static information every 5 seconds
   auto now = std::chrono::system_clock::now();
   if ((now - last_dump_time_) > std::chrono::seconds(5)) {
+    if (!synched_) {
+      GR_INFO("ber_sink: ", "OUT_OF_SYNC");
+    } else {
     GR_INFO("ber_sink: ", "processed=" << (recv_byte_count_ * 8.0 / 5 / 1000) << "kbps  "
         << "error_byte=" << error_byte_count_ << "B  "
         << "error_bits=" << error_bit_count_  << "b  "
         << "BER=" << (error_bit_count_ / 8.0) / recv_byte_count_);
+    }
     last_dump_time_ = now;
     recv_byte_count_ = 0;
     error_byte_count_ = 0;
