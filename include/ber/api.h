@@ -26,9 +26,9 @@
 #include <gnuradio/attributes.h>
 
 #ifdef gnuradio_ber_EXPORTS
-#  define BER_API __GR_ATTR_EXPORT
+#define BER_API __GR_ATTR_EXPORT
 #else
-#  define BER_API __GR_ATTR_IMPORT
+#define BER_API __GR_ATTR_IMPORT
 #endif
 
 #endif /* INCLUDED_BER_API_H */

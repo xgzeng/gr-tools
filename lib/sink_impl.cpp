@@ -1,15 +1,14 @@
 #include "sink_impl.h"
 #include <cassert>
 
-namespace gr { namespace ber {
+namespace gr {
+namespace ber {
 
-sink::sptr sink::make() {
-  return boost::make_shared<sink_impl>();
-}
+sink::sptr sink::make() { return boost::make_shared<sink_impl>(); }
 
 sink_impl::sink_impl()
-: block("ber_sink", io_signature::make(1, 1, 1), io_signature::make(0, 0, 0)) {
-}
+    : block("ber_sink", io_signature::make(1, 1, 1),
+            io_signature::make(0, 0, 0)) {}
 
 bool sink_impl::start() {
   synched_ = false;
@@ -24,19 +23,16 @@ bool sink_impl::start() {
 }
 
 static int count_ones(uint8_t b) {
-  static const uint8_t NIBBLE_LOOKUP[16] = {
-    0, 1, 1, 2, 1, 2, 2, 3,
-    1, 2, 2, 3, 2, 3, 3, 4
-  };
+  static const uint8_t NIBBLE_LOOKUP[16] = {0, 1, 1, 2, 1, 2, 2, 3,
+                                            1, 2, 2, 3, 2, 3, 3, 4};
 
   return NIBBLE_LOOKUP[b & 0x0F] + NIBBLE_LOOKUP[b >> 4];
 }
 
-int sink_impl::general_work(int noutput_items,
-                            gr_vector_int &ninput_items,
+int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
                             gr_vector_const_void_star &input_items,
                             gr_vector_void_star &output_items) {
-  auto items = reinterpret_cast<const uint8_t*>(input_items[0]);
+  auto items = reinterpret_cast<const uint8_t *>(input_items[0]);
   auto item_count = ninput_items[0];
 
   bits_.Append(items, item_count);
@@ -47,17 +43,17 @@ int sink_impl::general_work(int noutput_items,
     if (sync_pos) {
       GR_INFO("ber_sink", "stream synced");
       bits_.LeftShift(sync_pos.value());
-      synched_ =  true;
+      synched_ = true;
 
       prbs_.Reset();
     } else {
       bits_.LeftShift(bits_.bit_count() - sync_bytes_.size() * 8);
     }
   }
-  
+
   if (synched_) {
     int i = 0;
-    for ( ; i < bits_.bit_count() / 8; ++i) {
+    for (; i < bits_.bit_count() / 8; ++i) {
       uint8_t received = bits_.GetByte(i * 8);
       recv_byte_count_ += 1;
 
@@ -85,10 +81,11 @@ int sink_impl::general_work(int noutput_items,
     if (!synched_) {
       GR_INFO("ber_sink: ", "OUT_OF_SYNC");
     } else {
-    GR_INFO("ber_sink: ", "processed=" << (recv_byte_count_ * 8.0 / 5 / 1000) << "kbps  "
-        << "error_byte=" << error_byte_count_ << "B  "
-        << "error_bits=" << error_bit_count_  << "b  "
-        << "BER=" << (error_bit_count_ / 8.0) / recv_byte_count_);
+      // GR_INFO("ber_sink: ", "processed=" << (recv_byte_count_ * 8.0 / 5 /
+      // 1000) << "kbps  "
+      //     << "error_byte=" << error_byte_count_ << "B  "
+      //     << "error_bits=" << error_bit_count_  << "b  "
+      //     << "BER=" << (error_bit_count_ / 8.0) / recv_byte_count_);
     }
     last_dump_time_ = now;
     recv_byte_count_ = 0;
@@ -99,4 +96,5 @@ int sink_impl::general_work(int noutput_items,
   return 0;
 }
 
-}} // namespace gr::ber
+} // namespace ber
+} // namespace gr

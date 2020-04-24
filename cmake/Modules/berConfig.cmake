@@ -22,9 +22,10 @@ FIND_LIBRARY(
           /usr/local/lib64
           /usr/lib
           /usr/lib64
-)
+          )
+
+include("${CMAKE_CURRENT_LIST_DIR}/berTarget.cmake")
 
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(BER DEFAULT_MSG BER_LIBRARIES BER_INCLUDE_DIRS)
 MARK_AS_ADVANCED(BER_LIBRARIES BER_INCLUDE_DIRS)
-

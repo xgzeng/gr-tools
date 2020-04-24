@@ -42,8 +42,12 @@ if(NOT ber_sources)
 endif(NOT ber_sources)
 
 add_library(gnuradio-ber SHARED ${ber_sources})
+
+target_include_directories(gnuradio-ber PRIVATE "../include")
+
 target_link_libraries(gnuradio-ber ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
 set_target_properties(gnuradio-ber PROPERTIES DEFINE_SYMBOL "gnuradio_ber_EXPORTS")
+
 
 if(APPLE)
     set_target_properties(gnuradio-ber PROPERTIES
