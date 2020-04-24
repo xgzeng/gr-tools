@@ -28,26 +28,21 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(${Boost_INCLUDE_DIR})
 link_directories(${Boost_LIBRARY_DIRS})
 
-list(APPEND ber_sources
+add_library(gnuradio-ber SHARED
     prbs.h prbs.cpp
     source_impl.h source_impl.cpp
     bit_vector.h bit_vector.cpp
     sink_impl.h sink_impl.cpp
 )
 
-set(ber_sources "${ber_sources}" PARENT_SCOPE)
-if(NOT ber_sources)
-	MESSAGE(STATUS "No C++ sources... skipping lib/")
-	return()
-endif(NOT ber_sources)
+target_include_directories(gnuradio-ber
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+)
 
-add_library(gnuradio-ber SHARED ${ber_sources})
+#target_link_libraries(gnuradio-ber ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
 
-target_include_directories(gnuradio-ber PRIVATE "../include")
-
-target_link_libraries(gnuradio-ber ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
-set_target_properties(gnuradio-ber PROPERTIES DEFINE_SYMBOL "gnuradio_ber_EXPORTS")
-
+target_compile_definitions(gnuradio-ber PUBLIC "gnuradio_ber_EXPORTS")
 
 if(APPLE)
     set_target_properties(gnuradio-ber PROPERTIES
@@ -58,38 +53,19 @@ endif(APPLE)
 ########################################################################
 # Install built library files
 ########################################################################
-include(GrMiscUtils)
-GR_LIBRARY_FOO(gnuradio-ber RUNTIME_COMPONENT "ber_runtime" DEVEL_COMPONENT "ber_devel")
+# include(GrMiscUtils)
+# GR_LIBRARY_FOO(gnuradio-ber RUNTIME_COMPONENT "ber_runtime" DEVEL_COMPONENT "ber_devel")
 
 ########################################################################
 # Build and register unit test
 ########################################################################
 include(GrTest)
 
-include_directories(${CPPUNIT_INCLUDE_DIRS})
-
-list(APPEND test_ber_sources
-    #${CMAKE_CURRENT_SOURCE_DIR}/test_ber.cc
-    #${CMAKE_CURRENT_SOURCE_DIR}/qa_ber.cc
+add_executable(test-ber
     bit_vector.h bit_vector.cpp
     bit_vector_test.cpp
 )
 
-add_executable(test-ber ${test_ber_sources})
-
-target_link_libraries(
-  test-ber
-  ${GNURADIO_RUNTIME_LIBRARIES}
-  ${Boost_LIBRARIES}
-  # ${CPPUNIT_LIBRARIES}
-  gnuradio-ber
-)
+target_link_libraries(test-ber gnuradio-ber)
 
 GR_ADD_TEST(test_ber test-ber)
-
-########################################################################
-# Print summary
-########################################################################
-message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "Building for version: ${VERSION} / ${LIBVER}")
-

@@ -38,7 +38,6 @@ GR_PYTHON_INSTALL(
 ########################################################################
 # Handle the unit tests
 ########################################################################
-include(GrTest)
-
-set(GR_TEST_TARGET_DEPS gnuradio-ber)
-set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
+# include(GrTest)
+# set(GR_TEST_TARGET_DEPS gnuradio-ber)
+# set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)

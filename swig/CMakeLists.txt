@@ -19,14 +19,6 @@
 # Boston, MA 02110-1301, USA.
 
 ########################################################################
-# Check if there is C++ code at all
-########################################################################
-if(NOT ber_sources)
-    MESSAGE(STATUS "No C++ sources... skipping swig/")
-    return()
-endif(NOT ber_sources)
-
-########################################################################
 # Include swig generation macros
 ########################################################################
 find_package(SWIG)
@@ -53,14 +45,15 @@ GR_SWIG_MAKE(ber_swig ber_swig.i)
 ########################################################################
 # Install the build swig module
 ########################################################################
-GR_SWIG_INSTALL(TARGETS ber_swig DESTINATION ${GR_PYTHON_DIR}/ber)
+#GR_SWIG_INSTALL(TARGETS ber_swig DESTINATION ${GR_PYTHON_DIR}/ber)
 
 ########################################################################
 # Install swig .i files for development
 ########################################################################
 install(
-    FILES
+  FILES
     ber_swig.i
     ${CMAKE_CURRENT_BINARY_DIR}/ber_swig_doc.i
-    DESTINATION ${GR_INCLUDE_DIR}/ber/swig
+  DESTINATION
+    include/gnuradio/swig
 )

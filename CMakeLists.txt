@@ -94,12 +94,9 @@ if(NOT CMAKE_MODULES_DIR)
   set(CMAKE_MODULES_DIR lib${LIB_SUFFIX}/cmake)
 endif(NOT CMAKE_MODULES_DIR)
 
-set(GR_INCLUDE_DIR      include/ber)
-set(GR_CMAKE_DIR        ${CMAKE_MODULES_DIR}/ber)
-set(GR_PKG_DATA_DIR     ${GR_DATA_DIR}/${CMAKE_PROJECT_NAME})
-set(GR_PKG_DOC_DIR      ${GR_DOC_DIR}/${CMAKE_PROJECT_NAME})
-set(GR_PKG_CONF_DIR     ${GR_CONF_DIR}/${CMAKE_PROJECT_NAME}/conf.d)
-set(GR_PKG_LIBEXEC_DIR  ${GR_LIBEXEC_DIR}/${CMAKE_PROJECT_NAME})
+message("GR_INCLUDE_DIR=${GR_INCLUDE_DIR}")
+
+#set(GR_INCLUDE_DIR      include/ber)
 
 ########################################################################
 # On Apple only, set install name and use rpath correctly, if not already set
@@ -122,20 +119,6 @@ if(APPLE)
 endif(APPLE)
 
 ########################################################################
-# Find gnuradio build dependencies
-########################################################################
-find_package(Doxygen)
-
-########################################################################
-# Setup doxygen option
-########################################################################
-if(DOXYGEN_FOUND)
-    option(ENABLE_DOXYGEN "Build docs using Doxygen" ON)
-else(DOXYGEN_FOUND)
-    option(ENABLE_DOXYGEN "Build docs using Doxygen" OFF)
-endif(DOXYGEN_FOUND)
-
-########################################################################
 # Create uninstall target
 ########################################################################
 configure_file(
@@ -145,24 +128,22 @@ configure_file(
 
 add_custom_target(uninstall
     ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
-    )
-
+)
 
 ########################################################################
 # Add subdirectories
 ########################################################################
 add_subdirectory(include/ber)
 add_subdirectory(lib)
-add_subdirectory(apps)
-add_subdirectory(docs)
 add_subdirectory(swig)
 add_subdirectory(python)
-add_subdirectory(grc)
+
+# add_subdirectory(grc)
 
 ########################################################################
 # Install cmake search helper for this library
 ########################################################################
 
-install(FILES cmake/Modules/berConfig.cmake
-    DESTINATION ${CMAKE_MODULES_DIR}/ber
-)
+# install(FILES cmake/Modules/berConfig.cmake
+#     DESTINATION ${CMAKE_MODULES_DIR}/ber
+# )

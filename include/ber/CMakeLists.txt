@@ -21,7 +21,11 @@
 ########################################################################
 # Install public header files
 ########################################################################
-install(FILES
+install(
+  FILES
     api.h
-    DESTINATION include/ber
+    sink.h
+    source.h
+  DESTINATION
+    "include/gnuradio/ber"
 )

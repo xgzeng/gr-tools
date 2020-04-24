@@ -1,5 +1,4 @@
 #include "source_impl.h"
-#include <boost/dynamic_bitset.hpp>
 
 namespace gr { namespace ber {
 
