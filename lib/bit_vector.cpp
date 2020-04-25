@@ -1,11 +1,14 @@
 #include "bit_vector.h"
 #include <cassert>
 
-namespace gr { namespace ber {
+namespace gr {
+namespace ber {
 
-#define VALIDATE_INVARIANT() \
-  assert((bit_bytes_.empty() && head_bit_count_ == 0) \
-        || (head_bit_count_ >= 0 && head_bit_count_ < 8))
+#define VALIDATE_INVARIANT()                                                   \
+  assert((bit_bytes_.empty() && head_bit_count_ == 0) ||                       \
+         (head_bit_count_ >= 0 && head_bit_count_ < 8))
+
+const size_t BitVector::npos = -1;
 
 void BitVector::Clear() {
   head_bit_count_ = 0;
@@ -18,11 +21,11 @@ size_t BitVector::bit_count() const {
   return bit_bytes_.size() * 8 - head_bit_count_;
 }
 
-void BitVector::Append(const uint8_t* bytes, int count) {
+void BitVector::Append(const uint8_t *bytes, int count) {
   bit_bytes_.insert(bit_bytes_.end(), bytes, bytes + count);
 }
 
-void BitVector::Append(const std::vector<uint8_t>& bytes) {
+void BitVector::Append(const std::vector<uint8_t> &bytes) {
   bit_bytes_.insert(bit_bytes_.end(), bytes.begin(), bytes.end());
 }
 
@@ -45,20 +48,18 @@ uint8_t BitVector::GetByte(size_t bit_offset) const {
   if (left_shift_bits == 0) {
     return bit_bytes_[byte_offset];
   } else {
-    return (bit_bytes_[byte_offset] << left_shift_bits)
-        | (bit_bytes_[byte_offset + 1] >> (8 - left_shift_bits));
+    return (bit_bytes_[byte_offset] << left_shift_bits) |
+           (bit_bytes_[byte_offset + 1] >> (8 - left_shift_bits));
   }
 }
 
-boost::optional<size_t>
-BitVector::Find(const std::vector<uint8_t>& bytes) const {
+size_t BitVector::Find(const std::vector<uint8_t> &bytes) const {
   return Find(bytes.data(), bytes.size());
 }
 
-boost::optional<size_t>
-BitVector::Find(const uint8_t* bytes, int count) const {
+size_t BitVector::Find(const uint8_t *bytes, int count) const {
   if (bit_count() < count * 8) {
-    return boost::none;
+    return -1;
   }
 
   for (size_t i = 0; i <= bit_count() - count * 8; ++i) {
@@ -74,8 +75,9 @@ BitVector::Find(const uint8_t* bytes, int count) const {
       return i;
     }
   }
-  
-  return boost::none;
+
+  return -1;
 }
 
-}} // namespace gr::ber
+} // namespace ber
+} // namespace gr

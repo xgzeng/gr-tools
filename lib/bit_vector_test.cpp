@@ -1,5 +1,4 @@
 #include "bit_vector.h"
-#include <boost/optional/optional_io.hpp>
 
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
@@ -48,35 +47,32 @@ TEST_CASE("BitVector basic operation") {
   }
 }
 
-TEST_CASE("BitVector find") {
+TEST_CASE("BitVector Find") {
   uint8_t pattern[] {0x12, 0x34, 0x56};
 
   WHEN("BitVector is empty") {
     BitVector bv;
-    REQUIRE_FALSE(bv.Find(pattern, sizeof(pattern)));
+    REQUIRE(bv.Find(pattern, sizeof(pattern)) == BitVector::npos);
   }
 
   WHEN("BitVector is shorter then patten") {
     BitVector bv;
     bv.Append({0x12, 0x34});
-    bv.Find(pattern, sizeof(pattern));
-    REQUIRE_FALSE(bv.Find(pattern, sizeof(pattern)));
+    REQUIRE(bv.Find(pattern, sizeof(pattern)) == BitVector::npos);
 
     bv.Append({0x56});
-    REQUIRE(bv.Find(pattern, sizeof(pattern)).value() == 0);
+    REQUIRE(bv.Find(pattern, sizeof(pattern)) == 0);
   }
 
   WHEN("Patten data is in middle") {
     BitVector bv;
     bv.Append({0x01, 0x23, 0x45, 0x67});
-    bv.Find(pattern, sizeof(pattern));
-    REQUIRE(bv.Find(pattern, sizeof(pattern)).value() == 4);
+    REQUIRE(bv.Find(pattern, sizeof(pattern)) == 4);
   }
 
   WHEN("No Patten Data") {
     BitVector bv;
     bv.Append({0x01, 0x23, 0x45, 0x56});
-    bv.Find(pattern, sizeof(pattern));
-    REQUIRE_FALSE(bv.Find(pattern, sizeof(pattern)));
+    REQUIRE(bv.Find(pattern, sizeof(pattern)) == BitVector::npos);
   }
 }

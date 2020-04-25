@@ -94,10 +94,6 @@ if(NOT CMAKE_MODULES_DIR)
   set(CMAKE_MODULES_DIR lib${LIB_SUFFIX}/cmake)
 endif(NOT CMAKE_MODULES_DIR)
 
-message("GR_INCLUDE_DIR=${GR_INCLUDE_DIR}")
-
-#set(GR_INCLUDE_DIR      include/ber)
-
 ########################################################################
 # On Apple only, set install name and use rpath correctly, if not already set
 ########################################################################

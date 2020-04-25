@@ -25,8 +25,8 @@ include(GrPlatform) #define LIB_SUFFIX
 
 set(CMAKE_CXX_STANDARD 11)
 
-include_directories(${Boost_INCLUDE_DIR})
-link_directories(${Boost_LIBRARY_DIRS})
+#include_directories(${Boost_INCLUDE_DIR})
+#link_directories(${Boost_LIBRARY_DIRS})
 
 add_library(gnuradio-ber SHARED
     prbs.h prbs.cpp

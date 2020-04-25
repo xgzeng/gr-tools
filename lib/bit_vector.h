@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <cstdint>
-#include <boost/optional.hpp>
 
 namespace gr { namespace ber {
 
@@ -23,11 +22,13 @@ public:
   /// \param bit_offset, less than 
   uint8_t GetByte(size_t bit_offset) const;
 
+  static const size_t npos;
+
   /// find bit set
   /// \return offset of found position
-  boost::optional<size_t> Find(const uint8_t* bytes, int count) const;
+  size_t Find(const uint8_t* bytes, int count) const;
 
-  boost::optional<size_t> Find(const std::vector<uint8_t>& bytes) const;
+  size_t Find(const std::vector<uint8_t>& bytes) const;
 
 private:
   /// count of head bits that not belong to bit set logically

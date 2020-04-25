@@ -39,12 +39,11 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
   consume(0, item_count);
 
   if (!synched_) {
-    auto sync_pos = bits_.Find(sync_bytes_);
-    if (sync_pos) {
+    const auto sync_pos = bits_.Find(sync_bytes_);
+    if (sync_pos != BitVector::npos) {
       GR_INFO("ber_sink", "stream synced");
-      bits_.LeftShift(sync_pos.value());
+      bits_.LeftShift(sync_pos);
       synched_ = true;
-
       prbs_.Reset();
     } else {
       bits_.LeftShift(bits_.bit_count() - sync_bytes_.size() * 8);
