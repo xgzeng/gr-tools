@@ -33,13 +33,19 @@ endif()
 
 # Select the release build type by default to get optimization flags
 if(NOT CMAKE_BUILD_TYPE)
-   set(CMAKE_BUILD_TYPE "Release")
-   message(STATUS "Build type not specified: defaulting to release.")
+    set(CMAKE_BUILD_TYPE "Release")
+    message(STATUS "Build type not specified: defaulting to release.")
 endif(NOT CMAKE_BUILD_TYPE)
 set(CMAKE_BUILD_TYPE ${CMAKE_BUILD_TYPE} CACHE STRING "")
 
 # Make sure our local CMake Modules path comes first
-list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules")
+
+option(INSTALL_USER_LOCAL "Install to user local directory" ON)
+
+if(INSTALL_USER_LOCAL)
+    set(CMAKE_INSTALL_PREFIX "$ENV{HOME}/.local/")
+endif()
 
 # Set the version information here
 set(VERSION_MAJOR 1)
@@ -91,7 +97,7 @@ include(GrVersion)
 include(GrPlatform) #define LIB_SUFFIX
 
 if(NOT CMAKE_MODULES_DIR)
-  set(CMAKE_MODULES_DIR lib${LIB_SUFFIX}/cmake)
+    set(CMAKE_MODULES_DIR lib${LIB_SUFFIX}/cmake)
 endif(NOT CMAKE_MODULES_DIR)
 
 ########################################################################

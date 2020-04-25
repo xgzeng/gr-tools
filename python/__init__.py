@@ -27,9 +27,9 @@ from __future__ import unicode_literals
 # import swig generated symbols into the ber namespace
 try:
     # this might fail if the module is python-only
-    from .ber_swig import *
-except ImportError:
-    pass
+    from ._ber_swig import *
+except ImportError as e:
+    print("import _ber_swig module failed", e)
 
 # import any pure python here
 #

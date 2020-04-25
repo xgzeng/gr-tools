@@ -26,6 +26,8 @@ if(NOT PYTHONINTERP_FOUND)
     return()
 endif()
 
+include(FixGrPythonDir)
+
 ########################################################################
 # Install python sources
 ########################################################################

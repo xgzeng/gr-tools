@@ -24,10 +24,13 @@
 find_package(SWIG)
 find_package(PythonLibs)
 if(NOT SWIG_FOUND OR NOT PYTHONLIBS_FOUND)
+    message(WARNING "SWIG or PythonLibs not found")
     return()
 endif()
 include(GrSwig)
-include(GrPython)
+#include(GrPython)
+
+include(FixGrPythonDir)
 
 ########################################################################
 # Setup swig generation
@@ -35,17 +38,17 @@ include(GrPython)
 set(GR_SWIG_INCLUDE_DIRS $<TARGET_PROPERTY:gnuradio::runtime_swig,INTERFACE_INCLUDE_DIRECTORIES>)
 set(GR_SWIG_TARGET_DEPS gnuradio::runtime_swig)
 
-set(GR_SWIG_LIBRARIES gnuradio-ber)
+set(GR_SWIG_LIBRARIES gnuradio-ber gnuradio::runtime_swig)
 
-set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/ber_swig_doc.i)
-set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+#set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/ber_swig_doc.i)
+#set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 GR_SWIG_MAKE(ber_swig ber_swig.i)
 
 ########################################################################
 # Install the build swig module
 ########################################################################
-#GR_SWIG_INSTALL(TARGETS ber_swig DESTINATION ${GR_PYTHON_DIR}/ber)
+GR_SWIG_INSTALL(TARGETS ber_swig DESTINATION ${GR_PYTHON_DIR}/ber)
 
 ########################################################################
 # Install swig .i files for development
