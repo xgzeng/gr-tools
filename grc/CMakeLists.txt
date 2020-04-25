@@ -18,6 +18,6 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
-install(FILES ber_source.xml ber_sink.xml
+install(FILES ber_source.block.yml ber_sink.block.yml
     DESTINATION share/gnuradio/grc/blocks
 )

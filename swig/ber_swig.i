@@ -5,7 +5,7 @@
 %include "gnuradio.i"           // the common stuff
 
 //load generated python docstrings
-%include "ber_swig_doc.i"
+//%include "ber_swig_doc.i"
 
 %{
 #include "ber/source.h"

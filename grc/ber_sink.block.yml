@@ -1,0 +1,13 @@
+id: ber_sink
+label: Bit Error Rate Sink
+category: '[Tools]'
+
+inputs:
+-   domain: stream
+    dtype: byte
+
+templates:
+    imports: import ber
+    make: ber.sink_make()
+
+file_format: 1

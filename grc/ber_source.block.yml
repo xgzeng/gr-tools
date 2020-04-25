@@ -1,0 +1,13 @@
+id: ber_source
+label: Bit Error Rate Source
+category: '[Tools]'
+
+outputs:
+-   domain: stream
+    dtype: byte
+
+templates:
+    imports: import ber
+    make: ber.source_make()
+
+file_format: 1

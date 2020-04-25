@@ -139,8 +139,7 @@ add_subdirectory(include/ber)
 add_subdirectory(lib)
 add_subdirectory(swig)
 add_subdirectory(python)
-
-# add_subdirectory(grc)
+add_subdirectory(grc)
 
 ########################################################################
 # Install cmake search helper for this library
