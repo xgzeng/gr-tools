@@ -11,6 +11,8 @@ sink_impl::sink_impl()
             io_signature::make(0, 0, 0)) {}
 
 bool sink_impl::start() {
+  GR_LOG_NOTICE(this->d_logger, "started");
+
   synched_ = false;
   bits_.Clear();
   last_dump_time_ = std::chrono::system_clock::now();
@@ -63,7 +65,7 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
 
         continue_error_byte_count_++;
         if (continue_error_byte_count_ >= max_error_bytes_allowed_) {
-          GR_INFO("ber_sink", "continue error bytes, stream out of sync");
+          GR_LOG_INFO(this->d_logger, "continue error bytes, stream out of sync");
           synched_ = false;
           break;
         }
@@ -78,13 +80,15 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
   auto now = std::chrono::system_clock::now();
   if ((now - last_dump_time_) > std::chrono::seconds(5)) {
     if (!synched_) {
-      GR_INFO("ber_sink: ", "OUT_OF_SYNC");
+      GR_LOG_INFO(this->d_logger, "OUT_OF_SYNC");
     } else {
-      // GR_INFO("ber_sink: ", "processed=" << (recv_byte_count_ * 8.0 / 5 /
-      // 1000) << "kbps  "
-      //     << "error_byte=" << error_byte_count_ << "B  "
-      //     << "error_bits=" << error_bit_count_  << "b  "
-      //     << "BER=" << (error_bit_count_ / 8.0) / recv_byte_count_);
+      char msg[128];
+      sprintf(msg,
+              "processed %d(%fkbps), error_bytes=%d, error_bits=%d, BER=%f",
+              recv_byte_count_, (recv_byte_count_ * 8.0 / 5 / 1000),
+              error_byte_count_, error_bit_count_,
+              ((error_bit_count_ / 8.0) / recv_byte_count_));
+      GR_LOG_INFO(this->d_logger, msg);
     }
     last_dump_time_ = now;
     recv_byte_count_ = 0;
