@@ -19,7 +19,7 @@ public:
                    gr_vector_void_star &output_items) override;
 
 private:
-  int max_error_bytes_allowed_ = 64;
+  int max_error_bytes_allowed_ = 8;
 
   bool synched_ = false;
   BitVector bits_;
@@ -29,6 +29,7 @@ private:
   std::vector<uint8_t> sync_bytes_;
 
   int continue_error_byte_count_ {0};
+  int byte_pos_ = 0;
   int recv_byte_count_  = 0;
   int error_byte_count_ = 0;
   int error_bit_count_ = 0;

@@ -43,9 +43,10 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
   if (!synched_) {
     const auto sync_pos = bits_.Find(sync_bytes_);
     if (sync_pos != BitVector::npos) {
-      GR_INFO("ber_sink", "stream synced");
+      GR_LOG_INFO(this->d_logger, "synced");
       bits_.LeftShift(sync_pos);
       synched_ = true;
+      byte_pos_ = 0;
       prbs_.Reset();
     } else {
       bits_.LeftShift(bits_.bit_count() - sync_bytes_.size() * 8);
@@ -57,9 +58,13 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
     for (; i < bits_.bit_count() / 8; ++i) {
       uint8_t received = bits_.GetByte(i * 8);
       recv_byte_count_ += 1;
-
+      
       uint8_t expected = prbs_.Next();
       if (expected != received) {
+        char msg[128];
+        sprintf(msg, "error byte at %d, %x != %x", byte_pos_, (int)received, (int)expected);
+        GR_LOG_INFO(this->d_logger, msg);
+
         error_byte_count_ += 1;
         error_bit_count_ += count_ones(expected ^ received);
 
@@ -72,6 +77,8 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
       } else {
         continue_error_byte_count_ = 0;
       }
+
+      byte_pos_ += 1;
     }
     bits_.LeftShift(i * 8);
   }
