@@ -32,18 +32,6 @@ options:
     state: enabled
 
 blocks:
-- name: samp_rate
-  id: variable
-  parameters:
-    comment: ''
-    value: '32000'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [184, 12]
-    rotation: 0
-    state: enabled
 - name: ber_sink_0
   id: ber_sink
   parameters:
@@ -54,7 +42,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [552, 232.0]
+    coordinate: [400, 232.0]
     rotation: 0
     state: true
 - name: ber_source_0
