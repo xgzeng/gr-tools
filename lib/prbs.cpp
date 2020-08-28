@@ -40,6 +40,10 @@ int main(int argc, char* argv[]) {
 }
 #endif
 
+PRBSGenerator::PRBSGenerator() {
+  Reset();
+}
+
 void PRBSGenerator::Reset() {
   state_ = 0x10;
   seq_pos_ = 0;
