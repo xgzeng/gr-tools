@@ -40,10 +40,10 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
   bits_.Append(items, item_count);
   consume(0, item_count);
 
-  if (!synched_) {
+  if (!synched_ && (bits_.bit_count() >= sync_bytes_.size() * 8)) {
     const auto sync_pos = bits_.Find(sync_bytes_);
     if (sync_pos != BitVector::npos) {
-      GR_LOG_INFO(this->d_logger, "synced");
+      GR_LOG_INFO(this->d_logger, "byte stream synced");
       bits_.LeftShift(sync_pos);
       synched_ = true;
       byte_pos_ = 0;
@@ -86,9 +86,7 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
   // DUMP static information every 5 seconds
   auto now = std::chrono::system_clock::now();
   if ((now - last_dump_time_) > std::chrono::seconds(5)) {
-    if (!synched_) {
-      GR_LOG_INFO(this->d_logger, "OUT_OF_SYNC");
-    } else {
+    if (synched_) {
       char msg[128];
       sprintf(msg,
               "processed %d(%fkbps), error_bytes=%d, error_bits=%d, BER=%f",
@@ -102,7 +100,7 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
     error_byte_count_ = 0;
     error_bit_count_ = 0;
   }
-
+  
   return 0;
 }
 
