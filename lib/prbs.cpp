@@ -1,44 +1,8 @@
 #include "prbs.h"
 #include <vector>
 
-#if 0
 // https://en.wikipedia.org/wiki/Pseudorandom_binary_sequence
 // https://blog.kurttomlinson.com/posts/prbs-pseudo-random-binary-sequence
-
-int main(int argc, char* argv[]) {
-  //                       (Binary Form w/o x0 Term)
-  // PRBS5  x^5 + x^3 + 1      0b10100
-  // PRBS7  x^7 + x^6 + 1      0b1100000
-  // PRBS31 x^31 + x ^ 28 + 1  0x48000000
-  const uint32_t PBS7  = 0b1100000;
-  const uint32_t PBS31 = 0x48000000;
-  
-  const uint32_t POLYNOMIAL = PBS31;
-  
-  const uint32_t START_STATE = 0x01;
-  
-  uint32_t lfsr = START_STATE;
-  
-  std::string output_bits;
-  
-  uint32_t period = 0;
-  do {
-    uint32_t lsb = lfsr & 0x01; // LSB, output bit
-    
-    // output_bits += lsb ? '1' : '0';
-    
-    lfsr >>= 1;
-    if (lsb) {
-      lfsr ^= POLYNOMIAL;
-    }
-    ++period;
-  } while (lfsr != START_STATE);
-  
-  std::cout << "period is " << period << std::endl;
-  // std::cout << "output bits: " << output_bits << std::endl;
-  return 0;
-}
-#endif
 
 PRBSGenerator::PRBSGenerator() {
   Reset();

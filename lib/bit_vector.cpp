@@ -30,12 +30,15 @@ void BitVector::Append(const std::vector<uint8_t> &bytes) {
 }
 
 void BitVector::LeftShift(size_t count) {
+  VALIDATE_INVARIANT();
   assert(count <= bit_count());
 
   const auto discard_byte_count = (head_bit_count_ + count) / 8;
   bit_bytes_.erase(bit_bytes_.begin(), bit_bytes_.begin() + discard_byte_count);
 
   head_bit_count_ = (head_bit_count_ + count) % 8;
+
+  VALIDATE_INVARIANT();
 }
 
 uint8_t BitVector::GetByte(size_t bit_offset) const {
@@ -59,7 +62,7 @@ size_t BitVector::Find(const std::vector<uint8_t> &bytes) const {
 
 size_t BitVector::Find(const uint8_t *bytes, int count) const {
   if (bit_count() < count * 8) {
-    return -1;
+    return npos;
   }
 
   for (size_t i = 0; i <= bit_count() - count * 8; ++i) {
@@ -76,7 +79,7 @@ size_t BitVector::Find(const uint8_t *bytes, int count) const {
     }
   }
 
-  return -1;
+  return npos;
 }
 
 } // namespace ber

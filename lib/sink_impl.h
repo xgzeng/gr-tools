@@ -19,7 +19,7 @@ public:
                    gr_vector_void_star &output_items) override;
 
 private:
-  int max_error_bytes_allowed_ = 8;
+  int max_error_bytes_allowed_ = 16;
 
   bool synched_ = false;
   BitVector bits_;

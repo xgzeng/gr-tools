@@ -17,9 +17,10 @@ bool sink_impl::start() {
   bits_.Clear();
   last_dump_time_ = std::chrono::system_clock::now();
 
-  for (int i = 0; i < 16; ++i) {
+  for (int i = 0; i < 32; ++i) {
     sync_bytes_.push_back(prbs_.Next());
   }
+
   prbs_.Reset();
   return true;
 }
@@ -44,12 +45,19 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
     const auto sync_pos = bits_.Find(sync_bytes_);
     if (sync_pos != BitVector::npos) {
       GR_LOG_INFO(this->d_logger, "byte stream synced");
+      if (bits_.bit_count() % 8 != 0) {
+        GR_LOG_INFO(this->d_logger, "byte stream not byte aligned");
+      }
+
       bits_.LeftShift(sync_pos);
       synched_ = true;
       byte_pos_ = 0;
       prbs_.Reset();
     } else {
-      bits_.LeftShift(bits_.bit_count() - sync_bytes_.size() * 8);
+      // GR_LOG_INFO(this->d_logger, "byte stream not sync");
+      // GR_LOG_INFO(this->d_logger, bits_.bit_count());
+      bits_.LeftShift(bits_.bit_count() - sync_bytes_.size() * 8 - 1);
+      // GR_LOG_INFO(this->d_logger, bits_.bit_count());
     }
   }
 
@@ -62,7 +70,7 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
       uint8_t expected = prbs_.Next();
       if (expected != received) {
         char msg[128];
-        sprintf(msg, "error byte at %d, %x != %x", byte_pos_, (int)received, (int)expected);
+        // sprintf(msg, "error byte at %d, %x != %x", byte_pos_, (int)received, (int)expected);
         GR_LOG_INFO(this->d_logger, msg);
 
         error_byte_count_ += 1;

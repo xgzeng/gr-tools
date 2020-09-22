@@ -33,7 +33,7 @@ public:
 private:
   /// count of head bits that not belong to bit set logically
   /// valid value 0 - 7 while bit_bytes_ not empty
-  unsigned int head_bit_count_ {0};
+  size_t head_bit_count_ {0};
   std::vector<uint8_t> bit_bytes_;
 };
 
