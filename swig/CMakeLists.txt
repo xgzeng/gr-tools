@@ -18,6 +18,8 @@
 # the Free Software Foundation, Inc., 51 Franklin Street,
 # Boston, MA 02110-1301, USA.
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 ########################################################################
 # Include swig generation macros
 ########################################################################
@@ -28,17 +30,16 @@ if(NOT SWIG_FOUND OR NOT PYTHONLIBS_FOUND)
     return()
 endif()
 include(GrSwig)
-#include(GrPython)
-
-include(FixGrPythonDir)
+include(GrPython)
 
 ########################################################################
 # Setup swig generation
 ########################################################################
-set(GR_SWIG_INCLUDE_DIRS $<TARGET_PROPERTY:gnuradio::runtime_swig,INTERFACE_INCLUDE_DIRECTORIES>)
-set(GR_SWIG_TARGET_DEPS gnuradio::runtime_swig)
+get_target_property(GR_SWIG_INCLUDE_DIRS gnuradio::runtime_swig INTERFACE_INCLUDE_DIRECTORIES)
 
-set(GR_SWIG_LIBRARIES gnuradio-ber gnuradio::runtime_swig)
+#set(GR_SWIG_TARGET_DEPS gnuradio::runtime_swig)
+
+set(GR_SWIG_LIBRARIES gnuradio-ber)
 
 #set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/ber_swig_doc.i)
 #set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include)

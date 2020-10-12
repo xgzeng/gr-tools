@@ -26,15 +26,14 @@ if(NOT PYTHONINTERP_FOUND)
     return()
 endif()
 
-include(FixGrPythonDir)
-
 ########################################################################
 # Install python sources
 ########################################################################
 GR_PYTHON_INSTALL(
-    FILES
+  FILES
     __init__.py
-    DESTINATION ${GR_PYTHON_DIR}/ber
+  DESTINATION
+    ${GR_PYTHON_DIR}/ber
 )
 
 ########################################################################

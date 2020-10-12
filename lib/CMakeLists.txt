@@ -25,9 +25,6 @@ include(GrPlatform) #define LIB_SUFFIX
 
 set(CMAKE_CXX_STANDARD 11)
 
-#include_directories(${Boost_INCLUDE_DIR})
-#link_directories(${Boost_LIBRARY_DIRS})
-
 add_library(gnuradio-ber SHARED
     prbs.h prbs.cpp
     source_impl.h source_impl.cpp
@@ -40,7 +37,11 @@ target_include_directories(gnuradio-ber
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
 )
 
-#target_link_libraries(gnuradio-ber ${Boost_LIBRARIES} ${GNURADIO_ALL_LIBRARIES})
+target_link_libraries(gnuradio-ber
+    gnuradio::gnuradio-runtime
+    gnuradio::gnuradio-pmt
+    Log4Cpp::log4cpp
+)
 
 target_compile_definitions(gnuradio-ber PUBLIC "gnuradio_ber_EXPORTS")
 
