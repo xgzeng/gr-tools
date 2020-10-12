@@ -69,15 +69,15 @@ int sink_impl::general_work(int noutput_items, gr_vector_int &ninput_items,
       
       uint8_t expected = prbs_.Next();
       if (expected != received) {
-        char msg[128];
+        // char msg[128];
         // sprintf(msg, "error byte at %d, %x != %x", byte_pos_, (int)received, (int)expected);
-        GR_LOG_INFO(this->d_logger, msg);
+        // GR_LOG_INFO(this->d_logger, msg);
 
         error_byte_count_ += 1;
         error_bit_count_ += count_ones(expected ^ received);
 
         continue_error_byte_count_++;
-        if (continue_error_byte_count_ >= max_error_bytes_allowed_) {
+        if (continue_error_byte_count_ >= error_limits_) {
           GR_LOG_INFO(this->d_logger, "continue error bytes, stream out of sync");
           synched_ = false;
           break;
