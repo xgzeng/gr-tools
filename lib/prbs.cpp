@@ -28,8 +28,8 @@ uint8_t PRBSGenerator::Next() {
   }
 
   seq_pos_ += 1;
-  if (seq_pos_ >= max_length_) {
-    Reset();
-  }
+  // if (seq_pos_ >= max_length_) {
+  //   Reset();
+  // }
   return result;
 }
