@@ -30,6 +30,7 @@ add_library(gnuradio-ber SHARED
     source_impl.h source_impl.cpp
     bit_vector.h bit_vector.cpp
     sink_impl.h sink_impl.cpp
+    symbol_error_rate_impl.h symbol_error_rate_impl.cpp
 )
 
 target_include_directories(gnuradio-ber

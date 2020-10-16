@@ -1,5 +1,5 @@
 id: ber_sink
-label: Bit Error Rate Sink
+label: BER Sink
 category: '[Tools]'
 
 inputs:

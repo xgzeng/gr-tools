@@ -1,5 +1,5 @@
 id: ber_source
-label: Bit Error Rate Source
+label: BER Source
 category: '[Tools]'
 
 outputs:

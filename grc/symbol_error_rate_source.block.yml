@@ -1,0 +1,13 @@
+id: symbol_error_rate_source
+label: Symbol Error Rate Source
+category: '[Tools]'
+
+outputs:
+-   domain: stream
+    dtype: byte
+
+templates:
+    imports: import ber
+    make: ber.symbol_error_rate_source_make()
+
+file_format: 1

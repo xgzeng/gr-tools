@@ -57,7 +57,7 @@ GR_SWIG_INSTALL(TARGETS ber_swig DESTINATION ${GR_PYTHON_DIR}/ber)
 install(
   FILES
     ber_swig.i
-    ${CMAKE_CURRENT_BINARY_DIR}/ber_swig_doc.i
+#    ${CMAKE_CURRENT_BINARY_DIR}/ber_swig_doc.i
   DESTINATION
     include/gnuradio/swig
 )

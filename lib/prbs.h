@@ -15,6 +15,8 @@ public:
 
   uint8_t Next();
 
+  uint8_t Next(int bits);
+
 private:
   int max_length_ = 1024 * 64;
   uint64_t seq_pos_ = 0;
