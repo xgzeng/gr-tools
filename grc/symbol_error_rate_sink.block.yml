@@ -6,8 +6,14 @@ inputs:
 -   domain: stream
     dtype: byte
 
+parameters:
+-   id: bits_per_symbol
+    label: Bits Per Symbol
+    dtype: int
+    default: '1'
+
 templates:
     imports: import ber
-    make: ber.symbol_error_rate_sink_make()
+    make: ber.symbol_error_rate_sink_make(${bits_per_symbol})
 
 file_format: 1

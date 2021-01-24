@@ -3,17 +3,23 @@
 namespace gr {
 namespace ber {
 
-boost::shared_ptr<symbol_error_rate_source> symbol_error_rate_source::make() {
-  return boost::make_shared<SymbolErrorRateSourceImpl>();
+boost::shared_ptr<symbol_error_rate_source> symbol_error_rate_source::make(int bits_per_symbol) {
+  return boost::make_shared<SymbolErrorRateSourceImpl>(bits_per_symbol);
 }
 
-boost::shared_ptr<symbol_error_rate_sink> symbol_error_rate_sink::make() {
-  return boost::make_shared<SymbolErrorRateSinkImpl>();
+boost::shared_ptr<symbol_error_rate_sink> symbol_error_rate_sink::make(int bits_per_symbol) {
+  return boost::make_shared<SymbolErrorRateSinkImpl>(bits_per_symbol);
 }
 
 SymbolErrorRateSourceImpl::SymbolErrorRateSourceImpl()
     : block("ser_source", io_signature::make(0, 0, 0),
             io_signature::make(1, 1, 1 /* byte item */)) {}
+
+SymbolErrorRateSourceImpl::SymbolErrorRateSourceImpl(int bits_per_symbol)
+: block("ser_source", io_signature::make(0, 0, 0),
+        io_signature::make(1, 1, 1 /* byte item */)), bits_per_symbol_(bits_per_symbol) {
+
+}
 
 int SymbolErrorRateSourceImpl::general_work(
     int noutput_items, gr_vector_int &ninput_items,
@@ -22,7 +28,7 @@ int SymbolErrorRateSourceImpl::general_work(
   uint8_t *output_buf = reinterpret_cast<uint8_t *>(output_items[0]);
 
   for (int i = 0; i < noutput_items; ++i) {
-    output_buf[i] = prbs_.Next(bit_per_symbol_);
+    output_buf[i] = prbs_.Next(bits_per_symbol_);
   }
 
   produce(0, noutput_items);
@@ -33,13 +39,19 @@ SymbolErrorRateSinkImpl::SymbolErrorRateSinkImpl()
     : block("ser_sink", io_signature::make(1, 1, 1),
             io_signature::make(0, 0, 0)) {}
 
+
+SymbolErrorRateSinkImpl::SymbolErrorRateSinkImpl(int bits_per_symbol)
+    : block("ser_sink", io_signature::make(1, 1, 1),
+            io_signature::make(0, 0, 0)), bits_per_symbol_(bits_per_symbol) {
+}
+
 bool SymbolErrorRateSinkImpl::start() {
   synched_ = false;
 
   last_dump_time_ = std::chrono::system_clock::now();
 
   for (int i = 0; i < 32; ++i) {
-    sync_symbols_.push_back(prbs_.Next(bit_per_symbol_));
+    sync_symbols_.push_back(prbs_.Next(bits_per_symbol_));
   }
 
   prbs_.Reset();
@@ -80,7 +92,7 @@ int SymbolErrorRateSinkImpl::general_work(
   for (size_t i = 0; i < inputs_.size(); ++i) {
     recv_symbol_count_ += 1;
 
-    if (inputs_[i] != prbs_.Next(bit_per_symbol_)) {
+    if (inputs_[i] != prbs_.Next(bits_per_symbol_)) {
       error_symbol_count_ += 1;
       if (++continue_error_count_ >= error_limits_) {
         GR_LOG_INFO(this->d_logger, "symbol stream out of sync");

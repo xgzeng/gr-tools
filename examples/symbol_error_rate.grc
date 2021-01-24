@@ -49,6 +49,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
+    bits_per_symbol: '2'
     comment: ''
   states:
     bus_sink: false
@@ -62,6 +63,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
+    bits_per_symbol: '2'
     comment: ''
     maxoutbuf: '0'
     minoutbuf: '0'

@@ -13,7 +13,7 @@ public:
   /*!
    * @brief Return a shared_ptr to a new instance of source.
    */
-  static sptr make();
+  static sptr make(int bits_per_symbol);
 };
 
 class BER_API symbol_error_rate_sink : virtual public gr::block {
@@ -22,7 +22,7 @@ public:
   /*!
    * @brief Return a shared_ptr to a new instance of sink.
    */
-  static sptr make();
+  static sptr make(int bits_per_symbol);
 };
 
 } // namespace ber

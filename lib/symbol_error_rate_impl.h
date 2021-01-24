@@ -7,6 +7,7 @@ namespace gr { namespace ber {
 class SymbolErrorRateSourceImpl : public symbol_error_rate_source {
 public:
   SymbolErrorRateSourceImpl();
+  SymbolErrorRateSourceImpl(int bits_per_symbol);
 
   int general_work(int noutput_items,
 			       gr_vector_int &ninput_items,
@@ -14,13 +15,14 @@ public:
 			       gr_vector_void_star &output_items) override;
 
 private:
-  int bit_per_symbol_ = 1;
+  const int bits_per_symbol_ = 1;
   PRBSGenerator prbs_;
 };
 
 class SymbolErrorRateSinkImpl : public symbol_error_rate_sink {
 public:
   SymbolErrorRateSinkImpl();
+  SymbolErrorRateSinkImpl(int bits_per_symbol);
 
   bool start() override;
 
@@ -30,7 +32,7 @@ public:
                    gr_vector_void_star &output_items) override;
 
 private:
-  const int bit_per_symbol_ = 1;
+  const int bits_per_symbol_ = 1;
 
   const int error_limits_ = 64;
 
